@@ -4,15 +4,10 @@ export default function Main() {
     const [meme,setMeme] = useState({
         topText:"One does not simply",
         bottomText:"Walk into Mordor",
-        imageUrl:"http://i.imgflip.com/1bij.jpg"
+        imageUrl: 'http://i.imgflip.com/1bij.jpg'
     })
 
     const [allMeme,setAllMeme] = useState([])
-
-    function handleChange(event){
-        const {value,name} = event.currentTarget
-        setMeme(prevMeme => ({...prevMeme,[name]:value}))
-    }
 
     useEffect(() => {
         fetch("https://api.imgflip.com/get_memes")
@@ -27,6 +22,20 @@ export default function Main() {
             ...prevMeme,
             imageUrl:newImg
         }))
+    }
+
+    useEffect(() => {
+        fetch("https://api.xiau.net/dmpot/index.php")
+            .then(res => res.json())
+            .then(data => setMeme(prev => ({
+                ...prev, 
+                imageUrl: data.url // 假设返回{url: "图片地址"}
+            })))
+    }, [])
+
+    function handleChange(event){
+        const {value,name} = event.currentTarget
+        setMeme(prevMeme => ({...prevMeme,[name]:value}))
     }
 
     return (
@@ -59,3 +68,6 @@ export default function Main() {
         </main>
     )
 }
+
+
+
